@@ -14,7 +14,7 @@ dpkg-reconfigure -f non-interactive tzdata
 
 # Download the necessary packages to chroot for compiling and signing
 apt-get update -y
-apt-get install -y vim wget make bc vboot-kernel-utils git wireless-tools wpasupplicant
+apt-get install -y vim wget make bc vboot-kernel-utils git wireless-tools wpasupplicant cgpt parted links
 
 cd $work_dir
 mkdir ${build_dir}
@@ -25,9 +25,6 @@ cd linux-3.19
 make O=${build_dir} oldconfig
 make O=${build_dir} -j${cpus_count}
 make O=${build_dir} modules_install firmware_install install headers_install
-
-# Sign the newly built kernel
-vbutil_kernel --pack ${work_dir}/signed_kernel.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline.txt --arch x86
 
 # Download FW for sound and bluetooth
 cd ${work_dir}
@@ -40,6 +37,17 @@ wget https://wireless.wiki.kernel.org/_media/en/users/drivers/iwlwifi-7260-ucode
 tar xvzf iwlwifi-7260-ucode-23.13.10.0.tgz
 cp iwlwifi-7260-ucode-23.13.10.0/iwlwifi-7260-10.ucode /lib/firmware
 
+
+# Sign the newly built kernel
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
+
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
+
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_usb.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline_boot_from_usb.txt --arch x86
+
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
+
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
 
 set +x
 
