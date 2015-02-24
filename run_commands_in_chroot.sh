@@ -5,6 +5,7 @@ cpus_count=`cat /proc/cpuinfo | grep processor | wc -l`
 work_dir=/usr/src
 build_dir=${work_dir}/kernel_build
 
+
 # Setup locale and timezone
 cp /usr/share/zoneinfo/America/Toronto /etc/localtime
 echo 'LANG="en_US.UTF-8"' >  /etc/default/locale
@@ -14,7 +15,7 @@ dpkg-reconfigure -f non-interactive tzdata
 
 # Download the necessary packages to chroot for compiling and signing
 apt-get update -y
-apt-get install -y vim wget make bc vboot-kernel-utils git wireless-tools wpasupplicant cgpt parted links
+apt-get install -y vim wget make bc git wireless-tools wpasupplicant parted links sudo
 
 cd $work_dir
 mkdir ${build_dir}
@@ -38,16 +39,34 @@ tar xvzf iwlwifi-7260-ucode-23.13.10.0.tgz
 cp iwlwifi-7260-ucode-23.13.10.0/iwlwifi-7260-10.ucode /lib/firmware
 
 
+# Add chronos user with password chronos
+useradd --create-home --groups sudo --password chronos--user-group chronos
+
+
+# the following packages are necessary to compile vboot
+apt-get install -y libssl-dev pkg-config liblzma-dev libyaml-dev uuid-dev
+
+# Install vboot (cgpt, vbutil_kernel, keys, ...)
+cd ${work_dir}
+git clone https://chromium.googlesource.com/chromiumos/platform/vboot_reference
+cd vboot_reference
+git checkout d7d9d3b6699ec8af3da14f0a2d4660744b945252
+make genkeys futil cgpt
+make install
+mkdir -p /usr/share/vboot
+cp -avf tests/devkeys /usr/share/vboot
+
+
 # Sign the newly built kernel
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_usb.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline_boot_from_usb.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_usb.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_usb.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-3.19.0 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
 
 set +x
 

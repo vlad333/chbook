@@ -24,6 +24,7 @@ sudo cp .config ${chroot_work_dir}
 sudo cp kernel_cmdline_boot_from_sd.txt ${chroot_work_dir}
 sudo cp kernel_cmdline_boot_from_ssd.txt ${chroot_work_dir}
 sudo cp kernel_cmdline_boot_from_usb.txt ${chroot_work_dir}
+sudo cp bootstub.efi ${chroot_work_dir}
 sudo cp run_commands_in_chroot.sh ${chroot_work_dir}
 
 # Run script in chroot
