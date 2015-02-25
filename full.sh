@@ -4,8 +4,8 @@ arch=amd64
 target=trusty
 chroot_dir=trusty_rootfs
 
-# Install debootstrap on the host
-sudo apt-get install -y debootstrap
+# Install git and debootstrap on the host
+sudo apt-get install -y git debootstrapt 
 
 # Create chroot 
 mkdir ${chroot_dir}
