@@ -15,7 +15,7 @@ dpkg-reconfigure -f non-interactive tzdata
 
 # Download the necessary packages to chroot for compiling and signing
 apt-get update -y
-apt-get install -y vim wget make bc git wireless-tools wpasupplicant parted links sudo
+apt-get install -y vim wget make bc git wireless-tools wpasupplicant parted links sudo man
 
 cd $work_dir
 mkdir ${build_dir}
