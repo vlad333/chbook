@@ -4,9 +4,12 @@ arch=amd64
 target=trusty
 chroot_dir=trusty_rootfs
 
+# Install debootstrap on the host
+sudo apt-get install -y debootstrap
+
 # Create chroot 
-#mkdir ${chroot_dir}
-#sudo debootstrap --arch=${arch} --variant=buildd ${target} ${chroot_dir}
+mkdir ${chroot_dir}
+sudo debootstrap --arch=${arch} --variant=buildd ${target} ${chroot_dir}
 
 # Need to bind /dev, /dev/pts, /proc, and /sys before entering chroot
 sudo mount --bind /dev $chroot_dir/dev
