@@ -40,7 +40,8 @@ cp iwlwifi-7260-ucode-23.13.10.0/iwlwifi-7260-10.ucode /lib/firmware
 
 
 # Add chronos user with password chronos
-useradd --create-home --groups sudo --password chronos--user-group chronos
+useradd --create-home --groups sudo --user-group chronos
+echo chronos:chronos | chpasswd
 
 
 # the following packages are necessary to compile vboot
