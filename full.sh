@@ -5,7 +5,8 @@ target=trusty
 chroot_dir=trusty_rootfs
 
 # Install git and debootstrap on the host
-sudo apt-get install -y git debootstrap
+sudo apt-get update
+sudo apt-get install -y -f git debootstrap
 
 # Create chroot 
 mkdir ${chroot_dir}

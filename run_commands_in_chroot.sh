@@ -15,7 +15,7 @@ dpkg-reconfigure -f non-interactive tzdata
 
 # Download the necessary packages to chroot for compiling and signing
 apt-get update -y
-apt-get install -y vim wget make bc git wireless-tools net-tools wpasupplicant parted links sudo man locate isc-dhcp-client ubuntu-minimal
+apt-get install -y -f vim wget make bc git wireless-tools net-tools wpasupplicant parted links sudo man locate isc-dhcp-client ubuntu-minimal
 
 cd $work_dir
 mkdir ${build_dir}
@@ -52,7 +52,7 @@ echo "iface default inet dhcp" >> /etc/network/interfaces
 
 
 # the following packages are necessary to compile vboot
-apt-get install -y libssl-dev pkg-config liblzma-dev libyaml-dev uuid-dev
+apt-get install -y -f libssl-dev pkg-config liblzma-dev libyaml-dev uuid-dev
 
 # Install vboot (cgpt, vbutil_kernel, keys, ...)
 cd ${work_dir}
