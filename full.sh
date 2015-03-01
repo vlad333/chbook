@@ -5,14 +5,14 @@ target=trusty
 chroot_dir=trusty_rootfs
 
 # Install git and debootstrap on the host
-sudo apt-get install -y git debootstrap cgpt
+sudo apt-get install -y git debootstrap
 
 # Create chroot 
 mkdir ${chroot_dir}
 sudo debootstrap --arch=${arch} --variant=buildd ${target} ${chroot_dir}
 
 # Need to bind /dev, /dev/pts, /proc, and /sys before entering chroot
-sudo mount --bind /dev $chroot_dir/dev
+#sudo mount --bind /dev $chroot_dir/dev
 sudo mount --bind /dev/pts $chroot_dir/dev/pts
 sudo mount -t proc proc $chroot_dir/proc
 sudo mount -t sysfs sys $chroot_dir/sys
@@ -35,7 +35,7 @@ sudo chroot ${chroot_dir} /bin/bash -x ${work_dir}/run_commands_in_chroot.sh
 
 # Need to inbind /dev, /dev/pts, /proc, and /sys after leaving chroot
 sudo umount $chroot_dir/dev/pts
-sudo umount $chroot_dir/dev
+#sudo umount $chroot_dir/dev
 sudo umount $chroot_dir/proc
 sudo umount $chroot_dir/sys
 
