@@ -15,7 +15,7 @@ dpkg-reconfigure -f non-interactive tzdata
 
 # Download the necessary packages to chroot for compiling and signing
 apt-get update -y
-apt-get install -y vim wget make bc git wireless-tools wpasupplicant parted links sudo man
+apt-get install -y vim wget make bc git wireless-tools net-tools wpasupplicant parted links sudo man locate isc-dhcp-client ubuntu-minimal
 
 cd $work_dir
 mkdir ${build_dir}
@@ -42,6 +42,13 @@ cp iwlwifi-7260-ucode-23.13.10.0/iwlwifi-7260-10.ucode /lib/firmware
 # Add chronos user with password chronos
 useradd --create-home --groups sudo --user-group chronos
 echo chronos:chronos | chpasswd
+
+# Partially config wifi
+cd /etc/wpa_supplicant
+gunzip /usr/share/doc/wpa_supplicant/examples/wpa_supplicant.conf.gz
+echo "iface wlan0 inet manual" >> /etc/network/interfaces
+echo "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf" >> /etc/network/interfaces
+echo "iface default inet dhcp" >> /etc/network/interfaces
 
 
 # the following packages are necessary to compile vboot
