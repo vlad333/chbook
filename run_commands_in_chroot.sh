@@ -15,7 +15,10 @@ dpkg-reconfigure -f non-interactive tzdata
 
 # Download the necessary packages to chroot for compiling and signing
 apt-get update -y
-apt-get install -y -f vim wget make bc git wireless-tools net-tools wpasupplicant parted links sudo man locate isc-dhcp-client ubuntu-minimal
+apt-get install -y -f vim wget make bc git wireless-tools net-tools wpasupplicant parted links sudo man locate isc-dhcp-client
+#apt-get install -y -f ubuntu-minimal
+apt-get install -y -f kubuntu-desktop
+
 
 cd $work_dir
 mkdir ${build_dir}
