@@ -19,8 +19,8 @@ sudo mount -t proc proc $chroot_dir/proc
 sudo mount -t sysfs sys $chroot_dir/sys
 
 # Copy necessary files to the chroot
-apt_sources_file=/etc/apt/sources.list
-chroot_apt_sources_file=${chroot_dir}${apt_sources_file}
+apt_sources_file=sources.list
+chroot_apt_sources_file=${chroot_dir}/etc/apt/sources.list
 sudo cp ${apt_sources_file} ${chroot_apt_sources_file}
 work_dir=/usr/src
 chroot_work_dir=${chroot_dir}${work_dir}
