@@ -14,8 +14,10 @@ locale-gen en_US.UTF-8
 dpkg-reconfigure -f non-interactive tzdata
 
 # Download the necessary packages to chroot for compiling and signing
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 16126D3A3E5C1192
 apt-get update -y
-apt-get install -y -f vim wget make bc git wireless-tools net-tools wpasupplicant parted links sudo man locate isc-dhcp-client
+apt-get install -y -f apt-utils dialog
+apt-get install -y -f vim wget make bc git wireless-tools net-tools wpasupplicant parted links sudo man locate isc-dhcp-client iputils-ping
 #apt-get install -y -f ubuntu-minimal
 apt-get install -y -f kubuntu-desktop
 
@@ -48,7 +50,8 @@ echo chronos:chronos | chpasswd
 
 # Partially config wifi
 cd /etc/wpa_supplicant
-gunzip /usr/share/doc/wpa_supplicant/examples/wpa_supplicant.conf.gz
+cp /usr/share/doc/wpa_supplicant/examples/wpa_supplicant.conf.gz .
+gunzip wpa_supplicant.conf.gz
 echo "iface wlan0 inet manual" >> /etc/network/interfaces
 echo "wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf" >> /etc/network/interfaces
 echo "iface default inet dhcp" >> /etc/network/interfaces
@@ -62,7 +65,7 @@ cd ${work_dir}
 git clone https://chromium.googlesource.com/chromiumos/platform/vboot_reference
 cd vboot_reference
 git checkout d7d9d3b6699ec8af3da14f0a2d4660744b945252
-make genkeys futil cgpt
+ARCH=x86_64 make genkeys futil cgpt
 make install
 mkdir -p /usr/share/vboot
 cp -avf tests/devkeys /usr/share/vboot
