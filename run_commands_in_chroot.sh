@@ -13,6 +13,11 @@ echo 'America/Toronto' > /etc/timezone
 locale-gen en_US.UTF-8
 dpkg-reconfigure -f non-interactive tzdata
 
+# Change the hostname
+host_name='chromebook'
+echo "${host_name}" > /etc/hostname
+echo -e "\n127.0.0.1 localhost ${host_name}" >> /etc/hosts
+
 # Download the necessary packages to chroot for compiling and signing
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 16126D3A3E5C1192
 apt-get update -y
