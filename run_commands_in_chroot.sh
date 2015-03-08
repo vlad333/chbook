@@ -22,9 +22,11 @@ echo -e "\n127.0.0.1 localhost ${host_name}" >> /etc/hosts
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 16126D3A3E5C1192
 apt-get update -y
 apt-get install -y -f apt-utils dialog
+apt-get install -y -f kubuntu-netbook
 apt-get install -y -f vim wget make bc git wireless-tools net-tools wpasupplicant parted links sudo man locate isc-dhcp-client iputils-ping
 #apt-get install -y -f ubuntu-minimal
-apt-get install -y -f kubuntu-desktop
+dpkg-reconfigure lightdm
+dpkg-reconfigure dbus
 
 
 cd $work_dir
@@ -52,6 +54,7 @@ cp iwlwifi-7260-ucode-23.13.10.0/iwlwifi-7260-10.ucode /lib/firmware
 # Add chronos user with password chronos
 useradd --create-home --groups sudo --user-group chronos
 echo chronos:chronos | chpasswd
+chsh -s /bin/bash chronos
 
 # Partially config wifi
 cd /etc/wpa_supplicant
