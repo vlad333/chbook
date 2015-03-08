@@ -98,7 +98,7 @@ if [ ${confirmation_answer} = "yes" ]; then
 		exit 200
 	fi
 	sudo cgpt create ${media_dev_name}
-	if [ $? -ne 0]; then
+	if [ $? -ne 0 ]; then
 		echo "Failed on cgpt create creating a new partition table"
 		exit 300
 	fi
