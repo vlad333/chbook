@@ -1,8 +1,8 @@
 #!/bin/sh
 set -x
 arch=amd64
-target=trusty
-chroot_dir=trusty_rootfs
+target=xenial
+chroot_dir=xenial_rootfs
 
 work_dir=/usr/src
 chroot_work_dir=${chroot_dir}${work_dir}

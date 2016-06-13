@@ -1,11 +1,12 @@
 #!/bin/sh
 set -x
 arch=amd64
-target=trusty
-chroot_dir=trusty_rootfs
+target=xenial
+chroot_dir=xenial_rootfs
 
 # Install git and debootstrap on the host
 sudo apt-get update
+sudo apt-get install cgpt
 sudo apt-get install -y -f debootstrap
 
 # Create chroot 
