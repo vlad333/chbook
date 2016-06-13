@@ -22,7 +22,7 @@ echo -e "\n127.0.0.1 localhost ${host_name}" >> /etc/hosts
 #apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 16126D3A3E5C1192
 apt-get update -y
 apt-get install -y -f apt-utils dialog
-apt-get install -y -f kubuntu-netbook
+apt-get install -y -f lubuntu-desktop
 apt-get install -y -f vim wget make bc git wireless-tools net-tools wpasupplicant parted links sudo man locate isc-dhcp-client iputils-ping
 #apt-get install -y -f ubuntu-minimal
 dpkg-reconfigure lightdm
