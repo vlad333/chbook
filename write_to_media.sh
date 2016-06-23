@@ -38,6 +38,14 @@ if [ "${media_type}" = "sd" ]; then
 	fi
 	kernel_dev="${media_dev_name}p1"
 	rootfs_dev="${media_dev_name}p2"
+elif [ "${media_type}" = "ssd" ]; then
+	signed_kernel_image_file=${chroot_work_dir}/signed_kernel_on_sd_rootfs_on_ssd.bin
+	if [[ ${media_dev_name} != /dev/mmcblk? ]]; then
+		echo "For sd type devices only the /dev/mmcblk* form is supported for now"
+		exit 10
+	fi
+	kernel_dev="${media_dev_name}p1"
+	rootfs_dev="${media_dev_name}p2"
 elif [ "${media_type}" = "usb" ]; then
 	signed_kernel_image_file=${chroot_work_dir}/signed_kernel_on_usb_rootfs_on_usb.bin
 	if [[ ${media_dev_name} != /dev/sd? ]]; then
