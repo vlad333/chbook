@@ -32,9 +32,9 @@ dpkg-reconfigure dbus
 cd $work_dir
 mkdir ${build_dir}
 cp .config ${build_dir}
-wget -c -t 10 -T 10 https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.6.tar.xz
-tar xvJf linux-4.6.tar.xz
-cd linux-4.6
+wget -c -t 10 -T 10 https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.4.14.tar.xz
+tar xvJf linux-4.4.14.tar.xz
+cd linux-4.4.14
 make O=${build_dir} olddefconfig
 make O=${build_dir} -j${cpus_count}
 make O=${build_dir} modules_install firmware_install install headers_install
@@ -50,6 +50,10 @@ wget https://wireless.wiki.kernel.org/_media/en/users/drivers/iwlwifi-7260-ucode
 tar xvzf iwlwifi-7260-ucode-16.242414.0.tgz
 cp iwlwifi-7260-ucode-16.242414.0/iwlwifi-7260-16.ucode /lib/firmware
 
+
+# Download sample wave file
+cd $work_dir
+wget -c -t 10 -T 10 http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02.wav
 
 # Add chronos user with password chronos
 useradd --create-home --groups sudo --user-group chronos
@@ -80,15 +84,15 @@ cp -avf tests/devkeys /usr/share/vboot
 
 
 # Sign the newly built kernel
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.6.0 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.14 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.6.0 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.14 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_usb.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.6.0 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_usb.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_usb.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.14 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_usb.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.6.0 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.14 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.6.0 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.14 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
 
 set +x
 

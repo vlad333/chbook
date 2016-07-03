@@ -45,7 +45,7 @@ sudo umount $chroot_dir/dev/pts
 sudo umount $chroot_dir/proc
 sudo umount $chroot_dir/sys
 
-tar cvjf ${chroot_dir}.tar.bz2 ${chroot_dir}
+tar --acls --atime-preserve --posix --selinux --xattrs -cpvjf ${chroot_dir}.tar.bz2 ${chroot_dir}
 mv ${chroot_dir}.tar.bz2 ${chroot_dir}/
 
 set +x
