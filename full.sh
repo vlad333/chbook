@@ -39,6 +39,8 @@ sudo cp write_to_media.sh ${chroot_work_dir}
 # Run script in chroot
 sudo chroot ${chroot_dir} /bin/bash -x ${work_dir}/run_commands_in_chroot.sh
 
+sudo cp asound.state ${chroot_dir}/var/lib/alsa/asound.state
+
 # Need to inbind /dev, /dev/pts, /proc, and /sys after leaving chroot
 sudo umount $chroot_dir/dev/pts
 #sudo umount $chroot_dir/dev
