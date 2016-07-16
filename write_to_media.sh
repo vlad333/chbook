@@ -74,6 +74,16 @@ if [ ! -b "${media_dev_name}" ]; then
 	exit 4
 fi
 
+loopback_file_name=${chroot_dir}.loopback
+loopback_device_name=$(losetup -f)
+if [ "${media_type}" = "ssd" ]; then
+	bunzip2 ${loopback_file_name}.bz2
+	if [ !d "${chroot_dir}"]; then
+		mkdir -p ${chroot_dir}
+	fi
+	losetup ${loopback_device_name} ${loopback_file_name}
+	mount ${loopback_file_name} ${chroot_dir}
+fi
 
 if [ ! -d "${chroot_dir}" ]; then
 	echo "The chroot rootfs (${chroot_dir}) does not exist"
@@ -161,5 +171,9 @@ if [ ${confirmation_answer} = "yes" ]; then
 	fi
 fi
 
+if [ "${media_type}" = "ssd" ]; then
+	umount ${chroot_dir}
+	losetup ${loopback_device_name}
+fi
 
 set +x
