@@ -40,7 +40,7 @@ if [ "${media_type}" = "sd" ]; then
 	rootfs_dev="${media_dev_name}p2"
 elif [ "${media_type}" = "ssd" ]; then
 	signed_kernel_image_file=${chroot_work_dir}/signed_kernel_on_sd_rootfs_on_ssd.bin
-	if [[ ${media_dev_name} != /dev/mmcblk? ]]; then
+	if [[ ${media_dev_name} != /dev/mmcblk0 ]]; then
 		echo "For sd type devices only the /dev/mmcblk* form is supported for now"
 		exit 10
 	fi
@@ -83,6 +83,7 @@ if [ "${media_type}" = "ssd" ]; then
 	fi
 	losetup ${loopback_device_name} ${loopback_file_name}
 	mount ${loopback_file_name} ${chroot_dir}
+	chroot_dir=${chroot_dir}/${chroot_dir}
 fi
 
 if [ ! -d "${chroot_dir}" ]; then
