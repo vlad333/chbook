@@ -40,6 +40,8 @@ sudo cp write_to_media.sh ${chroot_work_dir}
 sudo chroot ${chroot_dir} /bin/bash -x ${work_dir}/run_commands_in_chroot.sh
 
 sudo cp asound.state ${chroot_dir}/var/lib/alsa/asound.state
+sudo mkdir ${chroot_dir}/etc/X11/xorg.conf.d
+sudo cp 20-intel.conf ${chroot_dir}/etc/X11/xorg.conf.d/
 
 # Need to inbind /dev, /dev/pts, /proc, and /sys after leaving chroot
 sudo umount $chroot_dir/dev/pts
