@@ -58,7 +58,7 @@ chroot_dir_size=$(du -s -B 1 ${chroot_dir} | cut -f 1)
 echo "${chroot_dir} is ${chroot_dir_size} bytes"
 bytes_in_mb=$((1024*1024))
 chroot_dir_size_in_mb=$((${chroot_dir_size} / ${bytes_in_mb}))
-loopback_file_size_in_mb=$((${chroot_dir_size_in_mb} + 100))
+loopback_file_size_in_mb=$((${chroot_dir_size_in_mb} + 1024))
 loopback_file_size=$((${loopback_file_size_in_mb} * ${bytes_in_mb}))
 dd if=/dev/zero of=${loopback_file_name} bs=1 seek=$((${loopback_file_size}-1)) count=1
 

@@ -23,6 +23,7 @@ echo -e "\n127.0.0.1 localhost ${host_name}" >> /etc/hosts
 apt-get update -y
 apt-get install -y -f apt-utils dialog
 apt-get install -y -f xubuntu-desktop
+#apt-get install -y -f kubuntu-desktop
 apt-get install -y -f vim wget make bc git wireless-tools net-tools wpasupplicant parted links sudo man locate isc-dhcp-client iputils-ping xdotool
 #apt-get install -y -f ubuntu-minimal
 dpkg-reconfigure lightdm
@@ -32,9 +33,9 @@ dpkg-reconfigure dbus
 cd $work_dir
 mkdir ${build_dir}
 cp .config ${build_dir}
-wget -c -t 10 -T 10 https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.4.8.tar.xz
-tar xvJf linux-4.4.8.tar.xz
-cd linux-4.4.8
+wget -c -t 10 -T 10 https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.4.24.tar.xz
+tar xvJf linux-4.4.24.tar.xz
+cd linux-4.4.24
 make O=${build_dir} olddefconfig
 make O=${build_dir} -j${cpus_count}
 make O=${build_dir} modules_install firmware_install install headers_install
@@ -84,15 +85,15 @@ cp -avf tests/devkeys /usr/share/vboot
 
 
 # Sign the newly built kernel
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.8 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.24 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.8 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_sd_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.24 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_usb.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.8 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_usb.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_usb.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.24 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_usb.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.8 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_sd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.24 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_sd.txt --arch x86
 
-vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.8 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
+vbutil_kernel --pack ${work_dir}/signed_kernel_on_usb_rootfs_on_ssd.bin --keyblock /usr/share/vboot/devkeys/recovery_kernel.keyblock --signprivate /usr/share/vboot/devkeys/recovery_kernel_data_key.vbprivk --version 1 --vmlinuz /boot/vmlinuz-4.4.24 --bootloader ${work_dir}/bootstub.efi --config ${work_dir}/kernel_cmdline_boot_from_ssd.txt --arch x86
 
 set +x
 
